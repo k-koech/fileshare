@@ -1,0 +1,45 @@
+a{
+    text-decoration: none !important;
+}
+.home
+{
+    height: 90vh;
+}
+.home .row
+{
+    height:100%;
+}
+
+.home .left-col 
+{
+ background-color: white;
+}
+  
+  /* Centered text */
+.home .left-col .centered 
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.home .right-col 
+{
+ background-color: rgb(255, 255, 255);
+}
+.home .right-col h1
+{
+    font-size: 8em;
+}  
+  /* Centered text */
+.home .right-col .centered 
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+
