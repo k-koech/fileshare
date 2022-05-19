@@ -1,9 +1,16 @@
 import React, { useState, useEffect, useContext } from "react";
 import Dropzone from "react-dropzone";
-import {AuthContext} from "../../context/AuthContext";
-import { getFiles, uploadFile } from "./upload-files.service";
+import {AuthContext} from "../context/AuthContext";
+import { FilesProvider } from "../context/FilesContext";
+import { AiFillEdit } from 'react-icons/ai';
+import { MdDeleteOutline } from 'react-icons/md';
 
-const UploadFiles = () => {
+
+
+
+const UploadFiles = () => {    
+    const { uploadFile, getFiles, deleteFile } = FilesProvider();
+
     const { user } = useContext(AuthContext);
 
   const [selectedFiles, setSelectedFiles] = useState(undefined);
@@ -51,6 +58,7 @@ const UploadFiles = () => {
     }
   };
 
+  
   return (
     <div className="container">
        <div className="row">
@@ -73,7 +81,7 @@ const UploadFiles = () => {
                   </div>
               )}
 
-              {/* Error messages */}
+               {/* Error messages  */}
               <div className="alert text-danger" role="alert">
                   {error_message}
               </div>
@@ -118,19 +126,61 @@ const UploadFiles = () => {
         {
             fileInfos.length > 0?
             (
+            
             <div className="card">
             <div className="card-header">List of Files</div>
-            <ul className="list-group list-group-flush">
-                {fileInfos.map((file, index) => (
-                <li className="list-group-item" key={index}>
-                    <a href={file.url}>{file.name}</a>
-                </li>
-                ))}
-            </ul>
+            <table className="table">
+              <thead className="thead-dark">
+                <tr>
+                  <th scope="col">No.</th>
+                  <th scope="col">Description</th>
+                  { user.is_admin?(
+                    <>
+                     <th scope="col">Edit</th>
+                     <th scope="col">Delete</th>
+                    </>
+                 
+                  ):(
+                    <>                   
+                    </>
+                  )}             
+                </tr>
+                <tr>
+                </tr>
+              </thead>
+              <tbody>
+              {fileInfos.map((file, index) => (
+                <tr key={index}>
+                  <th scope="row">{file.id}</th>       
+                  <td>
+                  <a href={file.url}>{file.title}</a>
+                  </td>
+                  { user.is_admin?(
+                    <>
+                    <td>
+                      <a className="btn text-success"><AiFillEdit/></a>
+                    </td>
+                    <td className="">
+                      <a className="btn text-danger"><MdDeleteOutline onClick={() => deleteFile(file.id)} /></a>
+                    </td>
+                  </>
+                  ):(
+                    <></>
+                  )
+                  }
+                   
+                </tr>
+                ))
+                }
+              </tbody>
+            </table>
             </div>
+          
             ):
             (
+              <>
                 <div className="alert alert-info text-center">No file has been uploaded!</div>
+              </>
             )
         
         }

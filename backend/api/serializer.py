@@ -64,6 +64,11 @@ class FileSerializer(serializers.ModelSerializer):
         model = Files
         fields = '__all__'
 
+
+class Files_Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = Files
+        fields = '__all__'
 # class LoginSerializer(TokenObtainPairSerializer):
 
 #     def validate(self, attrs):
