@@ -32,6 +32,7 @@ export const FilesProvider = () =>
   };
   //  Delete a file
   const deleteFile = (id) => {
+    let item = { name };
     API.delete(`/files/${id}/`).then((res) => getFiles());
 
       console.log(id)

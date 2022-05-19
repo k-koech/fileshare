@@ -36,7 +36,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('email','username','last_login', 'password', 'password2')
+        fields = ('email','username', 'password', 'password2')
         # extra_kwargs = {"username": {"error_messages": {"required": "Give yourself a username"}}}
 
     

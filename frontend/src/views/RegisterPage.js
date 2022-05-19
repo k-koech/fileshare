@@ -111,6 +111,16 @@ function Register()
         <h1 className="text-center">Register</h1>
         <form className="mx-5">
         <div className="form-group">
+          <label>Email</label>
+          <input type="text" className="form-control" name='email' 
+          value={inputs.email||""} 
+          onChange={handleChange}
+            placeholder="Email"
+            required />
+          
+          {error.email && <span className='text-small text-danger'>{error.email}</span>}
+        </div>
+        <div className="form-group">
           <label>Username</label>
           <input type="text" className="form-control" name='username' 
           value={inputs.username||""} 
