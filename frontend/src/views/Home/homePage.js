@@ -12,7 +12,7 @@ const Home = () => {
       <div className="row">
         <div className="left-col col-md-6">
           <div className="centered">
-              <img src={landing} alt="Snow" />
+              <img src={landing} alt="landing image" />
           </div>
         </div>
         <div className="right-col col-md-6">

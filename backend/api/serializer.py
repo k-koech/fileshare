@@ -44,9 +44,6 @@ class RegisterSerializer(serializers.ModelSerializer):
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError(
                 {"passwordError": "Password fields did not match!"})
-        # elif len(attrs['password'])<5 or len(attrs['password2']<5):
-        #     raise serializers.ValidationError(
-        #         {"passwordError": "Password SHOULD BE GREATER THAN 4 characters!"})
         return attrs
 
     def create(self, validated_data):
@@ -69,6 +66,8 @@ class Files_Serializer(serializers.ModelSerializer):
     class Meta:
         model = Files
         fields = '__all__'
+
+  
 # class LoginSerializer(TokenObtainPairSerializer):
 
 #     def validate(self, attrs):

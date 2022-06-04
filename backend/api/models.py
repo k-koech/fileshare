@@ -54,6 +54,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Files(models.Model):
     title = models.CharField( max_length=50,default="Kip")  
-    file = CloudinaryField('image')    
+    file =  models.FileField(upload_to='%Y:%m:%d')  
     date_posted = models.DateTimeField(verbose_name='date joined', auto_now_add=True)
-    user = models.ForeignKey("User",default=1, on_delete=models.CASCADE)
+    user = models.ForeignKey("User",default=25, on_delete=models.CASCADE)

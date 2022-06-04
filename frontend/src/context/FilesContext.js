@@ -17,6 +17,7 @@ export const FilesProvider = () =>
       let formData = new FormData();
     
       formData.append("file", file);
+      console.log("xxx", formData.file);
     
       return http.post("/upload/", formData, {
         headers: {
@@ -26,18 +27,25 @@ export const FilesProvider = () =>
       });
     };
 
-    // Get files
+   
+  //  Delete a file
+  const deleteFile = (id) => {
+    API.delete(`/file/delete/${id}/`)
+    .then(
+      (res) => { 
+        console.log(res)
+        getFiles()
+        window.location.href="/upload"
+
+      }
+      );
+
+      // console.log(id)
+  };
+ // Get files
   const getFiles = () => {
     return http.get("/files/");
   };
-  //  Delete a file
-  const deleteFile = (id) => {
-    let item = { name };
-    API.delete(`/files/${id}/`).then((res) => getFiles());
-
-      console.log(id)
-  };
-
   return {uploadFile,getFiles, deleteFile};
 
 }

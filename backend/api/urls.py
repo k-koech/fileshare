@@ -13,8 +13,16 @@ urlpatterns = [
     path('register/', views.RegisterView.as_view(), name='auth_register'),
 
     path('upload/', views.FileUploadView.as_view(), name='upload'),
-    path('files/', views.Files_ViewSet.as_view(), name="files"),
 
-    path('', views.getRoutes)
+    path('files/', views.Files_ViewSet.as_view(), name="files"),    
+    path('file/<pk>', views.FileDetail.as_view(), name='view_file'),
+
+    path('files/create', views.FileDetail.as_view(), name='create_file'),
+    path('files/update/<pk>', views.FileDetail.as_view(), name='update_file'),
+    path('file/delete/<pk>/', views.FileDetail.as_view(), name='delete_file'),
+
+    # path('', views.getRoutes)
 ]
+
+
 

@@ -30,9 +30,9 @@
 
 .dropzone {
   text-align: center;
-  padding: 30px;
+  padding: 3em 5em;
   border: 3px dashed #646363;
-  background-color: #fafafa;
+  background-color: #ebebeb;
   color: #5b5555;
   cursor: pointer;
   margin-bottom: 20px;
@@ -43,4 +43,12 @@
 .selected-file {
   color: #000; 
   font-weight: bold;
+}
+
+
+.user_messages
+{
+  position:absolute;
+  top:3em;
+  right:2em;
 }
