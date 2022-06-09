@@ -53,7 +53,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         return f"{self.email}"
 
 class Files(models.Model):
-    title = models.CharField( max_length=50,default="Kip")  
+    # title = models.CharField( max_length=50,default="Kip")  
     file =  models.FileField(upload_to='%Y:%m:%d')  
     date_posted = models.DateTimeField(verbose_name='date joined', auto_now_add=True)
-    user = models.ForeignKey("User",default=25, on_delete=models.CASCADE)
+    user = models.ForeignKey("User", on_delete=models.CASCADE)

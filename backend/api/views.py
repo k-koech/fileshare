@@ -4,13 +4,14 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.http import Http404, HttpResponse, JsonResponse
-from .serializer import FileSerializer, MyTokenObtainPairSerializer, RegisterSerializer, UserSerializer, Files_Serializer
+from .serializer import ChangePasswordSerializer, FileSerializer, MyTokenObtainPairSerializer, RegisterSerializer, UserSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import generics, viewsets
 from rest_framework.decorators import APIView
 from .models import Files, User
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework import status
+from rest_framework import status,permissions
+
 
 class MyTokenObtainPairView(TokenObtainPairView):
     queryset = User.objects.all()
@@ -27,13 +28,42 @@ class RegisterView(generics.CreateAPIView):
 
 
 class FileUploadView(generics.ListCreateAPIView):
+    # permission_classes = (permissions.IsAuthenticated, )
     queryset = Files.objects.all()
     serializer_class = FileSerializer
 
 class Files_ViewSet(generics.ListCreateAPIView):
+    # permission_classes = (permissions.IsAuthenticated, )
     queryset = Files.objects.all()
-    serializer_class = Files_Serializer
+    serializer_class = FileSerializer
 
+class UpdatePassword(APIView):
+    """
+    An endpoint for changing password.
+    """
+    # permission_classes = (permissions.IsAuthenticated, )
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def put(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        serializer = ChangePasswordSerializer(data=request.data)
+
+        if serializer.is_valid():
+            # Check old password
+            old_password = serializer.data.get("old_password")
+            if not self.object.check_password(old_password):
+                return Response({"old_password": ["Wrong password."]}, 
+                                status=status.HTTP_400_BAD_REQUEST)
+            # set_password also hashes the password that the user will get
+            self.object.set_password(serializer.data.get("new_password"))
+            self.object.save()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# FILES
 class FileDetail(APIView):
     # permission_classes = [IsAuthenticated]
     """
@@ -47,7 +77,7 @@ class FileDetail(APIView):
     # get file
     def get(self, request, pk, format=None):
         file = self.get_object(pk)
-        serializer = Files_Serializer(file)
+        serializer = FileSerializer(file)
         return Response(serializer.data)
     
 
@@ -61,17 +91,19 @@ class FileDetail(APIView):
     # update
     def put(self, request, pk, format=None):
         file = self.get_object(pk)
-        serializer = Files_Serializer(file, data=request.data)
+        serializer = FileSerializer(file, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     # delete file
     def delete(self, request, pk, format=None):
         file = self.get_object(pk)
         file.delete()
         return JsonResponse({"Success":"Successfully deleted"})
         # return Response(status=STATUS.HTTP_204_NO_CONTENT)
+
 
 
 @api_view(['GET'])
@@ -82,5 +114,6 @@ def getRoutes(request):
         '/api/upload/',
         '/api/files/',
         '/api/token/refresh/',
+        '/api/users/resetpassword/'
     ]
     return Response(routes)

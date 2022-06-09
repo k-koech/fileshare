@@ -9,9 +9,9 @@ urlpatterns = [
     path('token/', views.MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('users/<int:pk>/', views.UserDetail.as_view()),
-
+   
     path('register/', views.RegisterView.as_view(), name='auth_register'),
-
+    path('users/resetpassword/<int:pk>/', views.UpdatePassword.as_view()),
     path('upload/', views.FileUploadView.as_view(), name='upload'),
 
     path('files/', views.Files_ViewSet.as_view(), name="files"),    
@@ -24,5 +24,7 @@ urlpatterns = [
     # path('', views.getRoutes)
 ]
 
-
+urlpatterns += [
+    path('api-auth/', include('rest_framework.urls')),
+]
 

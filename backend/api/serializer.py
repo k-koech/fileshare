@@ -7,19 +7,15 @@ from django.contrib.auth.models import update_last_login
 from django.contrib.auth.password_validation import validate_password
 
 
-
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
+        token['id'] = user.id
         token['username'] = user.username
         token['email'] = user.email
         token['is_admin'] = user.is_admin
         return token
-        #  data['user'] = UserSerializer(self.user).data
-    #    data['refresh'] = str(refresh)
-        # data['access'] = str(refresh.access_token)
-
         
 class UserSerializer(serializers.ModelSerializer):
     is_admin = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
@@ -56,58 +52,27 @@ class RegisterSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"successFULL": "Successfully saved!"})
         return user
 
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    """
+    Serializer for password change endpoint.
+    """
+    class Meta:
+        model = User
+        fields = ['id', 'old_password', 'new_passwod']
+
+    # old_password = serializers.CharField(required=True)
+    # new_password = serializers.CharField(required=True)
+
+    def validate_new_password(self, value):
+        validate_password(value)
+        return value
+
+
 class FileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Files
         fields = '__all__'
 
 
-class Files_Serializer(serializers.ModelSerializer):
-    class Meta:
-        model = Files
-        fields = '__all__'
-
-  
-# class LoginSerializer(TokenObtainPairSerializer):
-
-#     def validate(self, attrs):
-#         data = super().validate(attrs)
-
-#         refresh = self.get_token(self.user)
-
-#         data['user'] = UserSerializer(self.user).data
-#         data['refresh'] = str(refresh)
-#         data['access'] = str(refresh.access_token)
-
-#         if api_settings.UPDATE_LAST_LOGIN:
-#             update_last_login(None, self.user)
-
-#         return data
-
-
-# class RegisterSerializer(UserSerializer):
-#     password = serializers.CharField(max_length=128, min_length=8, write_only=True, required=True)
-#     email = serializers.EmailField(required=True, write_only=True, max_length=128)
-
-#     class Meta:
-#         model = User
-#         fields = ['id', 'username', 'email', 'password', 'is_active', 'created', 'updated']
-
-#     def create(self, validated_data):
-#         try:
-#             user = User.objects.get(email=validated_data['email'])
-#         except ObjectDoesNotExist:
-#             user = User.objects.create_user(**validated_data)
-#         return user
-
-# .......................................
-# class UserSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = User
-#         fields = ['id', 'username', 'password']
-#         extra_kwargs = {'password': {'write_only': True, 'required': True}}
-
-#     def create(self, validated_data):
-#         user = User.objects.create_user(**validated_data)
-#         Token.objects.create(user=user)
-#         return user
