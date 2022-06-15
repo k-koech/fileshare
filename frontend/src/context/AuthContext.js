@@ -4,10 +4,15 @@ import { useNavigate } from "react-router-dom";
 import { AuthMessages } from "./ErrorMessages/AuthMessages"
 import { Auth } from "./ErrorMessages/Auth"
 
+
 export const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
-  
+export const AuthProvider = ({ children }) => 
+{
+  const [login_error_message, setlogin_ErrorMessage] = useState("");
+  const [login_success_message, setlogin_SuccessMessage] = useState("");
+  const [logout_success_message, setlogout_SuccessMessage] = useState("");
+
   const [authTokens, setAuthTokens] = useState(() =>
     localStorage.getItem("authTokens")
       ? JSON.parse(localStorage.getItem("authTokens"))
@@ -42,26 +47,24 @@ export const AuthProvider = ({ children }) => {
       setUser(jwt_decode(data.access));
       localStorage.setItem("authTokens", JSON.stringify(data));
       window.location.href="/upload"
-      console.log("success "+data.username)
-      console.log(response)
+      setlogin_SuccessMessage("Logged in successful")
+      // console.log(response)
     } 
     
     else if(response.status === 401)
     {
-      // console.log("Wrong credentials",response);
-      return (
-          
-          <Auth/>
-        
-        )
+      console.log("Wrong credentials",response);
+      setlogin_ErrorMessage("Wrong Credentials");
     }
-    else{
+    else
+    {
       console.log(response)
     }
+    
   };
 
   // USER REGISTRATION
-  const registerUser = async (email,username, password, password2) => {
+  const registerUser = async (email,username,is_staff,is_admin, password, password2) => {
     const response = await fetch("http://127.0.0.1:8000/api/register/", {
       method: "POST",
       headers: {
@@ -70,6 +73,8 @@ export const AuthProvider = ({ children }) => {
       body: JSON.stringify({
         email,
         username,
+        is_staff,
+        is_admin,
         password,
         password2
       })
@@ -88,14 +93,18 @@ export const AuthProvider = ({ children }) => {
   };
 
 // LOGOUT USER
-  const logoutUser = () => {
+  const logoutUser = () => 
+  {
     setAuthTokens(null);
     setUser(null);
     localStorage.removeItem("authTokens");
+    setlogout_SuccessMessage("Logout Success");
     // history.push("/");
   };
 
-  const contextData = {
+// CONTEXT DATA
+  const contextData = 
+  {
     user,
     setUser,
     authTokens,
@@ -105,7 +114,8 @@ export const AuthProvider = ({ children }) => {
     logoutUser
   };
 
-  useEffect(() => {
+  useEffect(() => 
+  {
     if (authTokens) 
     {
       setUser(jwt_decode(authTokens.access));
@@ -114,8 +124,82 @@ export const AuthProvider = ({ children }) => {
   }, [authTokens, loading]);
 
   return (
+    <>
     <AuthContext.Provider value={contextData}>
       {loading ? null : children}
     </AuthContext.Provider>
+    {
+         login_error_message!= "" || login_success_message!="" || logout_success_message!= ""?
+            ( 
+              <AuthMessages login_error_message={login_error_message} login_success_message={login_success_message}  logout_success_message={logout_success_message}/> 
+            ):(<>
+              <AuthMessages login_error_message={""} login_success_message={""}  logout_success_message={""}/> 
+            </>)
+        
+    }
+   
+    </>
   );
+
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const messages = () => {
+  return (
+    // <div>
+    //   <h5>Kelvin Kip</h5>
+    // </div>
+    <div className='user_messages opacity-25'>
+  
+      <> 
+       <div  className='card bg-danger text-white d-flex flex-row p-3 opacity-25'>
+           <h6 className='mx-3'>I'm here and i will be gone </h6>
+       </div>
+       
+
+       <div className='card bg-success text-white d-flex flex-row p-3 opacity-25 mt-2'>
+           <h6 className='mx-3'>I'm here and i will be gone</h6>
+       </div>
+      </>
+    </div>
+  )
+  // <AuthMessages data={"Kelvin"}/>
+}

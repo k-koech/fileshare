@@ -2,10 +2,10 @@ import React, { useState, useEffect, useContext } from "react";
 import Dropzone from "react-dropzone";
 import {AuthContext} from "../../context/AuthContext";
 import { FilesProvider } from "../../context/FilesContext";
-import { AiFillEdit,AiOutlineFileAdd,AiOutlineFilePdf,AiOutlineFileExcel } from 'react-icons/ai';
+import { AiFillEdit,AiOutlineFileAdd,AiOutlineFilePdf,AiOutlineFileExcel,AiOutlineFileWord } from 'react-icons/ai';
 import { MdDeleteOutline } from 'react-icons/md';
+import { FaRegFilePowerpoint } from 'react-icons/fa';
 import staff from './staff.png'; 
-
 
 
 const UploadFiles = () => {    
@@ -27,14 +27,6 @@ const UploadFiles = () => {
   }, []);
 
   const upload = () => {
-      // 
-      // const handleSubmit = e => {
-      //   e.preventDefault();
-      //   const email = e.target.email.value;
-      //   loginUser(email, password);
-      // };
-
-      // File 
       let currentFile = selectedFiles[0];
 
       setProgress(0);
@@ -113,14 +105,13 @@ const UploadFiles = () => {
                             <AiOutlineFileAdd className="h1"/>
                             </>
                               
-
                           )}
                       </div>
                       <form>
-                        <div className="form-group">
+                        {/* <div className="form-group">
                           <label>Description</label>
                           <input type="text" className="form-control" id="description" placeholder="Describe your file" />
-                        </div>
+                        </div> */}
                       
                         <aside className="selected-file-wrapper text-right">
                             <button className="btn btn-success" disabled={!selectedFiles} onClick={upload} >
@@ -178,25 +169,27 @@ const UploadFiles = () => {
                   <th scope="row">{file.id}</th>       
                   <td>
                      <a href={file.file}>
-                      { 
-                       file.file.split('.').pop() == "xlsx"?
-                       (
-                          <h4><AiOutlineFileExcel/></h4>
-                       ):
-                       (
-                          <h4><AiOutlineFilePdf /></h4>
-                      
-                       )
-                      
-                        
+                     {
+                       
+                        (() => {
+                            if (file.file.split('.').pop() == "xlsx" || file.file.split('.').pop() == "xlsm" || file.file.split('.').pop() == "xlsb" || file.file.split('.').pop() == "xltx")
+                                return <h4><AiOutlineFileExcel/></h4>
+                            else if (file.file.split('.').pop() == "pdf")
+                                return <h4><AiOutlineFilePdf /></h4>
+                            else if (file.file.split('.').pop() == "pptx" || (file.file.split('.').pop() == "pptx") || (file.file.split('.').pop() == "ppt") || (file.file.split('.').pop() == "ppt") )
+                                return <h4><FaRegFilePowerpoint /></h4>
+                            else if (file.file.split('.').pop() == "doc" || (file.file.split('.').pop() == "docm") || (file.file.split('.').pop() == "docx") )
+                                return <h4><AiOutlineFileWord /></h4>
+                            else 
+                                return <h4>Other Files</h4>
+
+                        })()
                       }
+                      
                      </a>
                   </td>
                   { user.is_admin?(
                     <>
-                    {/* <td>
-                      <a className="btn text-success"><AiFillEdit/></a>
-                    </td> */}
                     <td className="">
                       <a className="btn text-danger"><h4><MdDeleteOutline onClick={() => deleteFile(file.id)} /></h4></a>
                     </td>

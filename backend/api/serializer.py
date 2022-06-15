@@ -32,7 +32,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('email','username', 'password', 'password2')
+        fields = ('email','username','is_staff','is_admin', 'password', 'password2')
         # extra_kwargs = {"username": {"error_messages": {"required": "Give yourself a username"}}}
 
     
@@ -41,11 +41,10 @@ class RegisterSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {"passwordError": "Password fields did not match!"})
         return attrs
-
+   
     def create(self, validated_data):
         user = User.objects.create(
-           email=validated_data['email'], username=validated_data['username']
-        )
+           email=validated_data['email'], username=validated_data['username'],is_staff=validated_data['is_staff'], is_admin=validated_data['is_admin'])
 
         user.set_password(validated_data['password'])
         if user.save():

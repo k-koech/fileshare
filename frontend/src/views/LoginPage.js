@@ -1,14 +1,15 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { BiUser } from 'react-icons/bi';
 import { FiUser } from 'react-icons/fi'
 import { Link } from "react-router-dom";
 import { AuthMessages } from "../context/ErrorMessages/AuthMessages";
-import { Auth } from "../context/ErrorMessages/Auth"
 
 const LoginPage = () => {
   
   const { loginUser } = useContext(AuthContext);
+  const [login_error_message, setlogin_ErrorMessage] = useState("");
+
   
   const handleSubmit = e => {
     e.preventDefault();
@@ -21,12 +22,9 @@ const LoginPage = () => {
   return (
     
     <section className="container row mt-5 mx-auto">
-      {
-      // error.username && <span className='text-small text-danger'>{error.username}</span>
-      }
-      {/* <Auth/> */}
       <div className="col-md-3"></div>
       <div className="col-md-6 border-top border-left rounded mt-5 p-3 pt-5">
+        
         <h1 className='font-weight-500 text-center'>
           <FiUser/>
         </h1>
@@ -34,11 +32,11 @@ const LoginPage = () => {
         <form className="mx-5" onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Email</label>
-            <input type="text" className="form-control" id="email" placeholder="Enter email" />
+            <input type="text" className="form-control" id="email" placeholder="Enter email" required />
           </div>
           <div className="form-group">
             <label>Password</label>
-            <input type="password" className="form-control" id="password" placeholder="Enter Password" />
+            <input type="password" className="form-control" id="password" placeholder="Enter Password" required />
           </div>
           <button type="submit" className="btn btn-primary">Submit</button>
         </form>

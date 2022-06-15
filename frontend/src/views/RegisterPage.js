@@ -9,15 +9,19 @@ const Register = () =>
   const { registerUser } = useContext(AuthContext);
   const { user } = useContext(AuthContext);
 
+  let [is_staffChecked, staff_setChecked] = useState(false);
+  let [is_adminChecked, admin_setChecked] = useState(false);
+
   const handleSubmit = e => {
     e.preventDefault();
     const email = e.target.email.value;
     const username = e.target.username.value;
     const password = e.target.password.value;
     const password2 = e.target.password.value;
-    // email.length > 0 && 
-    console.log(email);
-    registerUser(email,username, password,password2);
+    const is_staff = e.target.is_staff.checked;
+    const is_admin = e.target.is_admin.checked;
+  
+    registerUser(email,username,is_staff,is_admin, password,password2);
   };
   
   
@@ -26,32 +30,45 @@ const Register = () =>
     { user ? (
         <>
         <section className="container row mx-auto mt-5">
-          <div className="col-md-3"></div>
-          <div className="col-md-6 border-top border-right border-bottom rounded p-5">
+          <div className="col-md-2"></div>
+          <div className="col-md-8 border-top border-right border-bottom rounded p-5">
               <h1 className='font-weight-500 text-center mt-2 mb-1'>
                 <FiUserPlus/>
               </h1>
-              <h1 className="text-center">Register</h1>
+              <h1 className="text-center">Register a user</h1>
               <form className="mx-5" onSubmit={handleSubmit}>
                 <div className="form-group">
                   <label>Email</label>
                   <input type="text" className="form-control" name='email' id="email" placeholder="Email"
                     required />
-                  {/* {error.email && <span className='text-small text-danger'>{error.email}</span>} */}
                 </div>
                 <div className="form-group">
                   <label>Username</label>
                   <input type="text" className="form-control" name='username' 
                   id="username" placeholder="Username" required />
-                  {/* {error.username && <span className='text-small text-danger'>{error.username}</span>} */}
                 </div>
+                <div className="form-group form-check">
+                  <input className="form-check-input" type="checkbox" checked={is_staffChecked} 
+                  onChange={(e) => {staff_setChecked(e.target.checked);admin_setChecked(false); } } name="is_staff" />
+                  <label className="form-check-label">
+                    Is Staff
+                  </label>
+                </div>
+
+                <div className="form-group form-check">
+                  <input className="form-check-input" type="checkbox" checked={is_adminChecked} 
+                  onChange={(e) => {admin_setChecked(e.target.checked);staff_setChecked(false)} } name="is_admin" />
+                  <label className="form-check-label">
+                    Is Admin
+                  </label>
+                </div>
+
                 <div className="form-group">
                   <label>Password</label>
                   <input type="password" className="form-control"
                   placeholder="Enter Password"  name='password' required
                   id="password"/>
 
-                  {/* {error.password && <span className='text-small text-danger'>{error.password}</span>} */}
                 </div>
                 <div className="form-group">
                   <label>Password</label>
@@ -59,15 +76,14 @@ const Register = () =>
                   placeholder="Confirm Password" name='password2' 
                   id="password2" />
                   
-                  {/* {error.password2 && <span className='text-small text-danger'>{error.password2}</span>} */}
                 </div>
                 <button type="submit" className="btn btn-primary" onClick={registerUser}>Register</button>
               </form>
-              <div className="mt-3 text-center">
+              {/* <div className="mt-3 text-center">
                     <p>Already Registered? <Link to="/login">Login</Link></p>
-              </div>
+              </div> */}
           </div>
-          <div className="col-md-3"></div>
+          <div className="col-md-2"></div>
     
         </section>
         </>
