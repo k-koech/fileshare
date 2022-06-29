@@ -25,15 +25,15 @@ console.log(user);
           </li>
           {user ? (
             <>
-              {/* <li className="nav-item active mx-3">
-                  <Link to="/protected">Protected Page</Link>
-              </li> */}
               <li className="nav-item active mx-3">
                 <Link to="/upload"><FiUpload/> Upload</Link>
               </li>
+              {user.is_admin?(
+              <>
               <li className="nav-item active mx-3">
                 <Link to="/register"><FiUserPlus/> Add User</Link>
               </li>
+              </>):<></>}
               <li className="nav-item active mx-3">
                 <Link to="/profile">
                   <FiUser/> {user.username}

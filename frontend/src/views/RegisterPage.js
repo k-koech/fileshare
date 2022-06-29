@@ -27,7 +27,7 @@ const Register = () =>
   
   return (
     <>      
-    { user ? (
+    { user.is_admin ? (
         <>
         <section className="container row mx-auto mt-5">
           <div className="col-md-2"></div>

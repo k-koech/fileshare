@@ -79,6 +79,8 @@ const Profile = () => {
                       <hr/>
                     </div>
                   </div>
+                  {user.is_admin?(
+                  <>
                   <div className="gutters-sm bg-dark">
                       <div className="card">
                         <div className="card-body bg-light">
@@ -97,7 +99,7 @@ const Profile = () => {
                         </div>
                       </div>
                   </div>
-
+                  </>):<></>}
 
                 </div>
               </div>
